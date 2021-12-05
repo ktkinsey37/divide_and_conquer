@@ -1,22 +1,36 @@
 function sortedFrequency(arr, val) {
-    let startingIdx
-    let endingIdx
-    let leftIdx = 0
-    let rightIdx = arr.length - 1
-    while (leftIdx < rightIdx){
-        let middleIdx = Math.floor(leftIdx + rightIdx / 2)
-          if (arr[middleIdx] == val && arr[middleIdx - 1] < val){
-              startingIdx = middleIdx
-          } else if (arr[middleIdx] == val && arr[middleIdx + 1] > val) {
-              endingIdx = middleIdx - 1
-          } else if (arr[middleIdx] < val) {
-              rightIdx = middleIdx - 1
-          } else if (arr[middleIdx] > val) {
-              leftIdx = middleIdx + 1
-          }
-      }
-      return(endingIdx-startingIdx)
+    const firstVal = findFirst(arr, val)
+    if (firstVal === -1) return firstVal
+    const secondVal = findLast(arr, val)
+    console.log(firstVal, secondVal, "firstval and second val before return")
+    return (secondVal - firstVal) + 1;
 
+}
+
+function findFirst(arr, val, low = 0, high = arr.length-1){
+    if (high >= low){
+        let mid = low + Math.floor((high - low) / 2)
+        if ((arr[mid - 1] < val || mid === 0 )&& arr[mid] === val){
+            return mid
+        } else if (arr[mid] < val){
+            return findFirst(arr, val, mid+1, high)
+        }
+        return findFirst(arr, val, low, mid-1)
+    }
+    return -1
+}
+
+function findLast(arr, val, low = 0, high = arr.length-1){
+    if (high >= low){
+        let mid = low + Math.floor((high - low) / 2)
+        if ((arr[mid + 1] > val || mid === arr.length-1)&& arr[mid] === val){
+            return mid
+        } else if (arr[mid] > val){
+            return findLast(arr, val, low, mid-1)
+        }
+        return findLast(arr, val, mid+1, high)
+    }
+    return -1
 }
 
 module.exports = sortedFrequency
